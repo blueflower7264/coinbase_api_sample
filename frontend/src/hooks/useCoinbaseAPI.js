@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 // Create configured axios instance
 const api = axios.create({
   baseURL: process.env.NODE_ENV === 'development' 
-    ? 'http://localhost:3001' 
+    ? 'http://localhost:3000' 
     : 'https://your-production-api.com',
   timeout: 5000,
   withCredentials: true

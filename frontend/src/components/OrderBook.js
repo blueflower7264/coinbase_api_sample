@@ -1,7 +1,7 @@
 import { useWebSocket } from '../hooks/useWebSocket';
 
 export const OrderBook = () => {
-  const wsData = useWebSocket('ws://localhost:3001');
+  const wsData = useWebSocket('ws://localhost:8030');
 
   if (!wsData || wsData.type !== 'l2update') return <div>Loading order book...</div>;
 

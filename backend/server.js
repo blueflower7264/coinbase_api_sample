@@ -9,7 +9,6 @@ app.use(cors());
 
 const PORT = 8030;
 
-// Initialize WebSocket connection to Coinbase
 const initCoinbaseWebSocket = () => {
   const ws = new WebSocket('wss://ws-feed.pro.coinbase.com');
 
@@ -25,10 +24,10 @@ const initCoinbaseWebSocket = () => {
     console.log('📡 Received:', JSON.parse(data));
   });
 
-  ws.on('close', () => {
-    console.log('❌ Disconnected from Coinbase WebSocket. Reconnecting...');
-    setTimeout(initCoinbaseWebSocket, 5000); // Reconnect after 5s
-  });
+  // ws.on('close', () => {
+  //   console.log('❌ Disconnected from Coinbase WebSocket. Reconnecting...');
+  //   setTimeout(initCoinbaseWebSocket, 5000); // Reconnect after 5s
+  // });
 
   ws.on('error', (err) => {
     console.error('⚠️ WebSocket Error:', err);
@@ -37,27 +36,24 @@ const initCoinbaseWebSocket = () => {
   return ws;
 };
 
-// REST API Endpoints
-app.get('/api/history/:product/:start/:end', async (req, res) => {
+app.get('/api/history/:product/:startTime/:endTime', async (req, res) => {
+  console.log(req.params, "Hello world!");
   try {
-    const response = await axios.get(`https://api.pro.coinbase.com/products/${req.params.product}/candles?start=${req.params.start}&end=${req.params.end}`);
+    const response = await axios.get(`https://api.pro.coinbase.com/products/${req.params.product}/candles?start=${req.params.startTime}&end=${req.params.endTime}`);
     res.json(response.data);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch historical data' });
   }
 });
 
-// Start HTTP server
 const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
 
-// WebSocket server for frontend
 const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (clientWS) => {
   console.log('🔌 New frontend client connected');
-
   clientWS.on('close', () => {
     console.log('🔌 Frontend client disconnected');
   });

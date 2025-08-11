@@ -30,7 +30,7 @@ ChartJS.register(
 );
 
 export const PriceChart = ({ product, startTime, endTime }) => {
-  const { data: history, loading } = useCoinbaseAPI(`history/${product}`);
+  const { data: history, loading } = useCoinbaseAPI(`history/${product}/${startTime}/${endTime}`);
   const wsData = useWebSocket('ws://localhost:8030');
 
   if (loading) return <div>Loading...</div>;
