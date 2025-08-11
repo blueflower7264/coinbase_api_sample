@@ -14,7 +14,6 @@ const initCoinbaseWebSocket = () => {
   const ws = new WebSocket('wss://ws-feed.pro.coinbase.com');
 
   ws.on('open', () => {
-    console.log('✅ Connected to Coinbase WebSocket');
     ws.send(JSON.stringify({
       type: 'subscribe',
       product_ids: ['BTC-USD', 'ETH-USD'],
@@ -39,9 +38,9 @@ const initCoinbaseWebSocket = () => {
 };
 
 // REST API Endpoints
-app.get('/api/history/:product', async (req, res) => {
+app.get('/api/history/:product/:start/:end', async (req, res) => {
   try {
-    const response = await axios.get(`https://api.pro.coinbase.com/products/${req.params.product}/candles`);
+    const response = await axios.get(`https://api.pro.coinbase.com/products/${req.params.product}/candles?start=${req.params.start}&end=${req.params.end}`);
     res.json(response.data);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch historical data' });
